@@ -18,7 +18,7 @@ public class PropostaModel {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	private String UUID;
-	@Column(nullable = false, length = 18)
+	@Column(nullable = false, length = 18, unique = true)
 	private String cpfOuCnpj;
 	@Column(nullable = false, length = 100)
 	private String email;

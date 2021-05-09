@@ -8,10 +8,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import br.com.zupacademy.brunomeloesilva.validacoesglobais.CpfOuCnpj;
+import br.com.zupacademy.brunomeloesilva.validacoesglobais.RegraDeNegocios;
+import br.com.zupacademy.brunomeloesilva.validacoesglobais.ValorDuplicado;
 
 public class PropostaDTORequest {
 	
-	@NotBlank @CpfOuCnpj
+	@NotBlank @CpfOuCnpj 
+	@ValorDuplicado(classeDominio = PropostaModel.class, nomeCampo = "cpfOuCnpj", groups = RegraDeNegocios.class)
 	private String cpfOuCnpj;
 	@NotBlank @Email
 	private String email;
@@ -30,7 +33,7 @@ public class PropostaDTORequest {
 		this.endereco = endereco;
 		this.salario = salario;
 	}
-	
+
 	public String getCpfOuCnpj() {
 		return cpfOuCnpj;
 	}
