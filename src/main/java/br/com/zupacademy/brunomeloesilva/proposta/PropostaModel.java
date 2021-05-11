@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -28,6 +30,8 @@ public class PropostaModel {
 	private String endereco;
 	@Column(nullable = false, columnDefinition = "NUMERIC(15,2) UNSIGNED")
 	private BigDecimal salario;
+	@Enumerated(EnumType.STRING)
+	private PropostaStatus propostaStatus;
 	
 	@Deprecated
 	public PropostaModel() {/*Somente para o Hibernate*/}
@@ -57,4 +61,11 @@ public class PropostaModel {
 	public BigDecimal getSalario() {
 		return salario;
 	}
+	public PropostaStatus getPropostaStatus() {
+		return propostaStatus;
+	}
+	public void setPropostaStatus(PropostaStatus propostaStatus) {
+		this.propostaStatus = propostaStatus;
+	}
+	
 }

@@ -1,4 +1,4 @@
-package br.com.zupacademy.brunomeloesilva.validacoesglobais;
+package br.com.zupacademy.brunomeloesilva.proposta.validacoes;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.validation.BindingResult;

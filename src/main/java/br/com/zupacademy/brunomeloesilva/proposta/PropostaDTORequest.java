@@ -7,9 +7,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import br.com.zupacademy.brunomeloesilva.validacoesglobais.CpfOuCnpj;
-import br.com.zupacademy.brunomeloesilva.validacoesglobais.RegraDeNegocios;
-import br.com.zupacademy.brunomeloesilva.validacoesglobais.ValorDuplicado;
+import br.com.zupacademy.brunomeloesilva.proposta.validacoes.CpfOuCnpj;
+import br.com.zupacademy.brunomeloesilva.proposta.validacoes.RegraDeNegocios;
+import br.com.zupacademy.brunomeloesilva.proposta.validacoes.ValorDuplicado;
 
 public class PropostaDTORequest {
 	

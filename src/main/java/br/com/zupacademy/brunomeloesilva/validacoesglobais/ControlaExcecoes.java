@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import br.com.zupacademy.brunomeloesilva.proposta.validacoes.PropostaJaExisteException;
+import feign.RetryableException;
+
 @RestControllerAdvice
 public class ControlaExcecoes extends ResponseEntityExceptionHandler {
 
@@ -38,6 +41,16 @@ public class ControlaExcecoes extends ResponseEntityExceptionHandler {
 		return ResponseEntity.unprocessableEntity().body(erroDTOResponseList);
 	}
 
+	@ExceptionHandler(RetryableException.class)
+	protected ResponseEntity<Object> handleConnectException(RetryableException ex) {
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(new ErroDTOResponse(null, ex.getLocalizedMessage()));
+	}
+	
+	@ExceptionHandler(Exception.class)
+	protected ResponseEntity<Object> handleException(Exception ex) {
+		return ResponseEntity.unprocessableEntity().body(new ErroDTOResponse(null, "Ocorreu um erro inesperado."));
+	}
+
 	private List<ErroDTOResponse> retornaErroDosCampos(MethodArgumentNotValidException ex) {
 		List<ErroDTOResponse> erroDTOResponseList = new ArrayList<>();
 		List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
@@ -51,3 +64,5 @@ public class ControlaExcecoes extends ResponseEntityExceptionHandler {
 		return erroDTOResponseList;
 	}
 }
+//TODO Preciso aprender como extrair valores das propriedades do ValidationMessages em classes
+//TODO Como faz para internacionalizar uma mensagem vinda de uma exception ?
