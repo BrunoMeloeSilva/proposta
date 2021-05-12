@@ -8,9 +8,12 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import br.com.zupacademy.brunomeloesilva.proposta.cartoes.CartaoModel;
 
 @Entity
 @Table(name = "PROPOSTA")
@@ -32,6 +35,8 @@ public class PropostaModel {
 	private BigDecimal salario;
 	@Enumerated(EnumType.STRING)
 	private PropostaStatus propostaStatus;
+	@OneToOne 
+	private CartaoModel cartao;
 	
 	@Deprecated
 	public PropostaModel() {/*Somente para o Hibernate*/}
@@ -67,5 +72,10 @@ public class PropostaModel {
 	public void setPropostaStatus(PropostaStatus propostaStatus) {
 		this.propostaStatus = propostaStatus;
 	}
-	
+	public CartaoModel getCartao() {
+		return cartao;
+	}
+	public void setCartao(CartaoModel cartaoModel) {
+		this.cartao = cartaoModel;
+	}
 }

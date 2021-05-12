@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.zupacademy.brunomeloesilva.proposta.analisefinanceira.AnalisaRestricoesFinanceiras;
 import br.com.zupacademy.brunomeloesilva.proposta.analisefinanceira.AnaliseFinanceiraDTORequest;
 import br.com.zupacademy.brunomeloesilva.proposta.validacoes.PropostaJaExisteException;
 import br.com.zupacademy.brunomeloesilva.proposta.validacoes.RegraDeNegocios;
-import br.com.zupacademy.brunomeloesilva.proposta.analisefinanceira.AnalisaRestricoesFinanceiras;
 import feign.FeignException.FeignClientException;
 import feign.RetryableException;
 
