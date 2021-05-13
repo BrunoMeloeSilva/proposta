@@ -133,6 +133,31 @@ services:
       VAULT_DEV_ROOT_TOKEN_ID: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_TOKEN: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_ADDR: http://127.0.0.1:8200
+  db: 
+    image: mariadb
+    container_name: database
+    restart: on-failure
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=proposta
+  proposta: 
+    build: 
+      dockerfile: ./Dockerfile 
+      context: . 
+    image: brunomeloesilva/propostas 
+    container_name: propostas
+    environment:
+      - DB_URL=jdbc:mysql://db:3306/proposta
+      - DB_USER=root
+      - DB_PASS=root
+      - API_RESTRICOESFINANCEIRAS_DOMAIN=http://analise:9999
+      - API_RESTRICOESFINANCEIRAS_RECURSO=/api/solicitacao
+      - API_CARTOES_DOMAIN=http://contas:8888
+      - API_CARTOES_RECURSO=/api/cartoes?idProposta={idProposta}
+    ports: 
+      - "8080:8080"  
+    depends_on: 
+      - db    
 
 volumes:
   grafana-volume:
