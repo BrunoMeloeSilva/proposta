@@ -2,6 +2,10 @@ package br.com.zupacademy.brunomeloesilva.proposta.cartoes;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(value = Include.NON_NULL)
 public class CartaoDTOResponse {
 
 	private String id;
@@ -16,6 +20,14 @@ public class CartaoDTOResponse {
 	//private Vencimento vencimento;
 	private String idProposta;
 
+	@Deprecated
+	public CartaoDTOResponse() {/*Para retorno do Feign*/}
+	public CartaoDTOResponse(CartaoModel cartao) {
+		id = cartao.getId();
+		emitidoEm = cartao.getEmitidoEm();
+		titular = cartao.getTitular();
+		limite = cartao.getLimite();
+	}
 	public String getId() {
 		return id;
 	}

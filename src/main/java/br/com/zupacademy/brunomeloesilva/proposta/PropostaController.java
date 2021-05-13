@@ -13,13 +13,15 @@ import org.springframework.core.MethodParameter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.zupacademy.brunomeloesilva.proposta.analisefinanceira.AnalisaRestricoesFinanceiras;
+import br.com.zupacademy.brunomeloesilva.proposta.analisefinanceira.APIRestricoesFinanceiras;
 import br.com.zupacademy.brunomeloesilva.proposta.analisefinanceira.AnaliseFinanceiraDTORequest;
 import br.com.zupacademy.brunomeloesilva.proposta.validacoes.PropostaJaExisteException;
 import br.com.zupacademy.brunomeloesilva.proposta.validacoes.RegraDeNegocios;
@@ -35,7 +37,7 @@ public class PropostaController {
 	@Autowired
 	Validator validator;
 	@Autowired
-	AnalisaRestricoesFinanceiras analisaRestricoesFinanceiras;
+	APIRestricoesFinanceiras analisaRestricoesFinanceiras;
 	
 	@PostMapping
 	@Transactional
@@ -51,6 +53,16 @@ public class PropostaController {
 		
 		URI uriProposta = uriComponentsBuilder.path("/propostas/{id}").build(propostaModel.getUUID());
 		return ResponseEntity.created(uriProposta).body(new PropostaDTOResponse(propostaModel));
+	}
+	
+	@GetMapping("/{idProposta}")
+	public ResponseEntity<PropostaDTOResponseCompleta> consultaProposta(@PathVariable String idProposta){
+		PropostaModel propostaModel = entityManager.find(PropostaModel.class, idProposta);
+		if(propostaModel != null) {
+			PropostaDTOResponseCompleta propostaDTOResponseCompleta = new PropostaDTOResponseCompleta(propostaModel);
+			return ResponseEntity.ok(propostaDTOResponseCompleta);
+		}
+		return ResponseEntity.notFound().build();
 	}
 
 	private void defineStatusDaProposta(PropostaModel propostaModel) throws RetryableException {

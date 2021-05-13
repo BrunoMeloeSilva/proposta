@@ -4,7 +4,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @FeignClient(name = "restricoesFinanceiras", url = "${api.restricoesFinanceiras.domain}")
-public interface AnalisaRestricoesFinanceiras {
+public interface APIRestricoesFinanceiras {
     
     @PostMapping("${api.restricoesFinanceiras.domain.recurso}")
     AnaliseFinanceiraDTOResponse analisar(AnaliseFinanceiraDTORequest dtoRequestAnaliseFinanceira);

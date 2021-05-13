@@ -23,6 +23,8 @@ public class CartaoModel {
 	//private Vencimento vencimento;
 	private String idProposta;
 	
+	@Deprecated
+	public CartaoModel() {/*Para uso do Hibernate no retorno das consultas*/}
 	public CartaoModel(CartaoDTOResponse cartaoGerado) {
 		this.id = cartaoGerado.getId();
 		this.emitidoEm = cartaoGerado.getEmitidoEm();
