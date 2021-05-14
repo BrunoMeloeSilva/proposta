@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,8 @@ public class CartaoController {
 	
 	@PersistenceContext
 	EntityManager entityManager;
+	@Autowired
+	APICartao apiCartao;
 	
 	@PostMapping("/{numeroCartao}")
 	@Transactional
@@ -61,17 +64,15 @@ public class CartaoController {
 		BloqueioModel bloqueioModel = new BloqueioModel(userAgent, host);
 		entityManager.persist(bloqueioModel);
 		cartaoModel.setBloqueio(bloqueioModel);
+		
+		//TODO O correto para resolver este ponto aqui, seria com publicação de eventos.
+		//Porque em um cenário real, se essa requisição demorar, a transação no banco fica
+		//aberta esperando o retorno do request !
+		try{
+			CartaoStatusDTOResposnse informaBloqueioCartao = apiCartao.informaBloqueioCartao(numeroCartao, new BloqueioDTORequest());
+			cartaoModel.setStatus(informaBloqueioCartao.getResultado());
+		}catch (Exception e) {}
+
 		return ResponseEntity.ok().build();		
 	}
 }
-/* Poderia pegar todo o Header da requisição:
- * 
- * @RequestHeader HttpHeaders httpHeaders
- * 
- * Ou somente um atributo especifico do Header:
- * 
- * @RequestHeader("meu-header") String myHeader
- * 
- * Quando vc requisita a captura de um valor do Header com @RequestHeader
- * se o valor não vier, dá pau, lançando MissingRequestHeaderException
- */

@@ -24,6 +24,7 @@ public class CartaoModel {
 	//private Renegociacao renegociacao;
 	//private Vencimento vencimento;
 	private String idProposta;
+	private String status;
 	
 	@Deprecated
 	public CartaoModel() {/*Para uso do Hibernate no retorno das consultas*/}
@@ -55,6 +56,12 @@ public class CartaoModel {
 	}
 	public void setBloqueio(BloqueioModel bloqueio) {
 		this.bloqueio = bloqueio;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}	
 	
 }
