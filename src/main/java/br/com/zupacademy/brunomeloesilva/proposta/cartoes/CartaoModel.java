@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,7 +15,8 @@ public class CartaoModel {
 	private String id;
 	private LocalDateTime emitidoEm;
 	private String titular;
-	//private List<Object> bloqueios = null;
+	@OneToOne
+	private BloqueioModel bloqueio;
 	//private List<Object> avisos = null;
 	//private List<Object> carteiras = null;
 	//private List<Object> parcelas = null;
@@ -47,5 +49,13 @@ public class CartaoModel {
 	}
 	public String getIdProposta() {
 		return idProposta;
+	}
+	public BloqueioModel getBloqueio() {
+		return bloqueio;
+	}
+	public void setBloqueio(BloqueioModel bloqueio) {
+		this.bloqueio = bloqueio;
 	}	
+	
 }
+//TODO Deveria habilitar UTC no projeto.

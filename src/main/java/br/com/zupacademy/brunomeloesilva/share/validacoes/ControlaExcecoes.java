@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -49,6 +50,11 @@ public class ControlaExcecoes extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	protected ResponseEntity<Object> handleException(Exception ex) {
 		return ResponseEntity.badRequest().body(new ErroDTOResponse(null, "Ocorreu um erro inesperado."));
+	}
+	
+	@ExceptionHandler(MissingRequestHeaderException.class)
+	protected ResponseEntity<Object> handleMissingRequestHeaderException(MissingRequestHeaderException ex) {
+		return ResponseEntity.badRequest().body(new ErroDTOResponse(null, "É esperado no Header HTTP o user-agent e o Host."));
 	}
 
 	private List<ErroDTOResponse> retornaErroDosCampos(MethodArgumentNotValidException ex) {
