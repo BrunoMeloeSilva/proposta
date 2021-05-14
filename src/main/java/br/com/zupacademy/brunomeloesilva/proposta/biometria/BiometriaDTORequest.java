@@ -1,7 +1,7 @@
 package br.com.zupacademy.brunomeloesilva.proposta.biometria;
 
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.CartaoModel;
-import br.com.zupacademy.brunomeloesilva.proposta.validacoes.ValorDuplicado;
+import br.com.zupacademy.brunomeloesilva.share.validacoes.ValorDuplicado;
 
 public class BiometriaDTORequest {
 

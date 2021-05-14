@@ -1,4 +1,4 @@
-package br.com.zupacademy.brunomeloesilva.proposta.validacoes;
+package br.com.zupacademy.brunomeloesilva.share.validacoes;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

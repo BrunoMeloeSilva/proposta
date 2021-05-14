@@ -1,4 +1,4 @@
-package br.com.zupacademy.brunomeloesilva.validacoesglobais;
+package br.com.zupacademy.brunomeloesilva.share.validacoes;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

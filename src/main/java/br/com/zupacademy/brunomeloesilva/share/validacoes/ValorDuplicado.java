@@ -1,4 +1,4 @@
-package br.com.zupacademy.brunomeloesilva.proposta.validacoes;
+package br.com.zupacademy.brunomeloesilva.share.validacoes;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
