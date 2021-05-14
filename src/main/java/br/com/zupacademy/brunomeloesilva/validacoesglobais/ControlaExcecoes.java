@@ -48,7 +48,7 @@ public class ControlaExcecoes extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(Exception.class)
 	protected ResponseEntity<Object> handleException(Exception ex) {
-		return ResponseEntity.unprocessableEntity().body(new ErroDTOResponse(null, "Ocorreu um erro inesperado."));
+		return ResponseEntity.badRequest().body(new ErroDTOResponse(null, "Ocorreu um erro inesperado."));
 	}
 
 	private List<ErroDTOResponse> retornaErroDosCampos(MethodArgumentNotValidException ex) {
