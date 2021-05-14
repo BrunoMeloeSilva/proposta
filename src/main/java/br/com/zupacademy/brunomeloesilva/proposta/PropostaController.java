@@ -25,6 +25,7 @@ import br.com.zupacademy.brunomeloesilva.proposta.analisefinanceira.APIRestricoe
 import br.com.zupacademy.brunomeloesilva.proposta.analisefinanceira.AnaliseFinanceiraDTORequest;
 import br.com.zupacademy.brunomeloesilva.proposta.validacoes.PropostaJaExisteException;
 import br.com.zupacademy.brunomeloesilva.proposta.validacoes.RegraDeNegocios;
+import br.com.zupacademy.brunomeloesilva.share.meter.MinhasMetricas;
 import feign.FeignException.FeignClientException;
 import feign.RetryableException;
 
@@ -38,6 +39,8 @@ public class PropostaController {
 	Validator validator;
 	@Autowired
 	APIRestricoesFinanceiras analisaRestricoesFinanceiras;
+	@Autowired
+	MinhasMetricas minhasMetricas;
 	
 	@PostMapping
 	@Transactional
@@ -50,6 +53,8 @@ public class PropostaController {
 		entityManager.persist(propostaModel);
 		
 		defineStatusDaProposta(propostaModel);
+		
+		minhasMetricas.meuContadorPropostasCriadas();
 		
 		URI uriProposta = uriComponentsBuilder.path("/propostas/{id}").build(propostaModel.getUUID());
 		return ResponseEntity.created(uriProposta).body(new PropostaDTOResponse(propostaModel));
