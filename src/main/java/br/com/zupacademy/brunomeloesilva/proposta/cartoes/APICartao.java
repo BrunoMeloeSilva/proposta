@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.avisoviagem.AvisoViagemDTORequest;
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.bloqueio.BloqueioDTORequest;
+import br.com.zupacademy.brunomeloesilva.proposta.cartoes.carteira.CarteiraDTORequest;
 
 @FeignClient(name = "cartoes", url = "${api.cartoes.domain}")
 public interface APICartao {
@@ -19,4 +20,7 @@ public interface APICartao {
 	
 	@PostMapping("${api.cartoes.domain.recurso.avisoviagem}")
 	String informaAvisoViagem(@PathVariable String numeroCartao, AvisoViagemDTORequest avisoViagemDTORequest);
+	
+	@PostMapping("${api.cartoes.domain.recurso.vincularcarteira}")
+	String vinculoComCarteiraDigital(@PathVariable String numeroCartao, CarteiraDTORequest carteiraDTORequest);
 }

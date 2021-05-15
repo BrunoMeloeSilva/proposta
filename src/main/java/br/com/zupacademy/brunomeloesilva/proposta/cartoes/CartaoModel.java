@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.avisoviagem.AvisoViagemModel;
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.bloqueio.BloqueioModel;
+import br.com.zupacademy.brunomeloesilva.proposta.cartoes.carteira.CarteiraModel;
 
 @Entity
 @Table(name = "CARTAO")
@@ -24,7 +25,8 @@ public class CartaoModel {
 	private BloqueioModel bloqueio;
 	@OneToMany(mappedBy = "cartao")
 	private List<AvisoViagemModel> avisosDeViagens;
-	//private List<Object> carteiras = null;
+	@OneToMany(mappedBy = "cartao")
+	private List<CarteiraModel> carteiras;
 	//private List<Object> parcelas = null;
 	private Integer limite;
 	//private Renegociacao renegociacao;
@@ -71,8 +73,9 @@ public class CartaoModel {
 	}
 	public List<AvisoViagemModel> getAvisosDeViagens() {
 		return avisosDeViagens;
+	}
+	public List<CarteiraModel> getCarteiras() {
+		return carteiras;
 	}	
-	
-	
 }
 //TODO Deveria habilitar UTC no projeto.

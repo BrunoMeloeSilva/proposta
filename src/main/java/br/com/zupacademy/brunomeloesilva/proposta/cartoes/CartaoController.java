@@ -26,6 +26,9 @@ import br.com.zupacademy.brunomeloesilva.proposta.cartoes.avisoviagem.AvisoViage
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.avisoviagem.AvisoViagemModel;
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.bloqueio.BloqueioDTORequest;
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.bloqueio.BloqueioModel;
+import br.com.zupacademy.brunomeloesilva.proposta.cartoes.carteira.CarteiraDTORequest;
+import br.com.zupacademy.brunomeloesilva.proposta.cartoes.carteira.CarteiraModel;
+import br.com.zupacademy.brunomeloesilva.proposta.cartoes.carteira.TipoCarteira;
 import feign.FeignException;
 
 @RestController
@@ -81,7 +84,7 @@ public class CartaoController {
 		return ResponseEntity.ok().build();		
 	}
 	
-	@PatchMapping("/{numeroCartao}/avisos-viagens")
+	@PostMapping("/{numeroCartao}/avisos-viagens")
 	@Transactional
 	public ResponseEntity<Void> avisoViagem(@PathVariable String numeroCartao
 			, @RequestHeader("user-agent") String userAgent
@@ -103,5 +106,34 @@ public class CartaoController {
 		}
 
 		return ResponseEntity.ok().build();
+	}
+	
+	@PostMapping("/{numeroCartao}/carteiras-digitais")
+	@Transactional
+	public ResponseEntity<Void> incluirCarteiraDigital(@PathVariable String numeroCartao
+			,@RequestBody @Valid CarteiraDTORequest carteiraDTORequest
+			,UriComponentsBuilder uriComponentsBuilder){
+		
+		CartaoModel cartaoModel = entityManager.find(CartaoModel.class, numeroCartao);
+		if(cartaoModel == null)
+			return ResponseEntity.notFound().build();
+		
+		for (CarteiraModel carteiraDigital : cartaoModel.getCarteiras()) {
+			if(carteiraDigital.getCarteira().equals(TipoCarteira.PAYPAL))
+				throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Este cartão já foi vinculado ao PAYPAL.");
+		}
+		
+		URI uri = null;
+		try {
+			//TODO O correto para resolver este ponto aqui, seria com publicação de eventos.
+			apiCartao.vinculoComCarteiraDigital(numeroCartao, carteiraDTORequest);
+			CarteiraModel carteiraModel = new CarteiraModel(cartaoModel, carteiraDTORequest.getEmail(), carteiraDTORequest.getCarteira());
+			entityManager.persist(carteiraModel);
+			uri = uriComponentsBuilder.path("/{numeroCartao}/carteiras-digitais/{IdCarteira}").build(numeroCartao, carteiraModel.getId());
+		}catch (FeignException e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro com o sistema legado de vinculo de carteiras.");
+		}
+		
+		return ResponseEntity.created(uri).build();
 	}
 }
