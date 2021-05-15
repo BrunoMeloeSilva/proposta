@@ -15,6 +15,7 @@ import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.zupacademy.brunomeloesilva.proposta.validacoes.PropostaJaExisteException;
@@ -55,6 +56,11 @@ public class ControlaExcecoes extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(MissingRequestHeaderException.class)
 	protected ResponseEntity<Object> handleMissingRequestHeaderException(MissingRequestHeaderException ex) {
 		return ResponseEntity.badRequest().body(new ErroDTOResponse(null, "É esperado no Header HTTP o user-agent e o Host."));
+	}
+	
+	@ExceptionHandler(ResponseStatusException.class)
+	protected ResponseEntity<Object> handleResponseStatusException(ResponseStatusException ex) {
+		return ResponseEntity.status(ex.getStatus()).body(new ErroDTOResponse(null, ex.getLocalizedMessage()));
 	}
 
 	private List<ErroDTOResponse> retornaErroDosCampos(MethodArgumentNotValidException ex) {

@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.zupacademy.brunomeloesilva.proposta.biometria.BiometriaDTORequest;
@@ -24,6 +26,7 @@ import br.com.zupacademy.brunomeloesilva.proposta.cartoes.avisoviagem.AvisoViage
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.avisoviagem.AvisoViagemModel;
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.bloqueio.BloqueioDTORequest;
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.bloqueio.BloqueioModel;
+import feign.FeignException;
 
 @RestController
 @RequestMapping("/cartoes")
@@ -89,10 +92,16 @@ public class CartaoController {
 		if(cartaoModel == null)
 			return ResponseEntity.notFound().build();
 		
-		AvisoViagemModel avisoViagemModel = new AvisoViagemModel(avisoViagemDTORequest.getDestinoViagem()
-				, avisoViagemDTORequest.getDataTerminoViagem(), userAgent, host, cartaoModel);
-		entityManager.persist(avisoViagemModel);
-		
+		//TODO O correto para resolver este ponto aqui, seria com publicação de eventos.
+		try {
+			apiCartao.informaAvisoViagem(numeroCartao, avisoViagemDTORequest);
+			AvisoViagemModel avisoViagemModel = new AvisoViagemModel(avisoViagemDTORequest.getDestinoViagem()
+					, avisoViagemDTORequest.getDataTerminoViagem(), userAgent, host, cartaoModel);
+			entityManager.persist(avisoViagemModel);
+		}catch (FeignException e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro com o sistema legado de aviso de cartão.");
+		}
+
 		return ResponseEntity.ok().build();
 	}
 }
