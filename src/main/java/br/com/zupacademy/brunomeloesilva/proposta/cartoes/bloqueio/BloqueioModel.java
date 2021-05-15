@@ -1,4 +1,4 @@
-package br.com.zupacademy.brunomeloesilva.proposta.cartoes;
+package br.com.zupacademy.brunomeloesilva.proposta.cartoes.bloqueio;
 
 import java.time.LocalDateTime;
 

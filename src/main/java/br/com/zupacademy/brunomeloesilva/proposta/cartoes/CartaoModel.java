@@ -1,11 +1,16 @@
 package br.com.zupacademy.brunomeloesilva.proposta.cartoes;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import br.com.zupacademy.brunomeloesilva.proposta.cartoes.avisoviagem.AvisoViagemModel;
+import br.com.zupacademy.brunomeloesilva.proposta.cartoes.bloqueio.BloqueioModel;
 
 @Entity
 @Table(name = "CARTAO")
@@ -17,7 +22,8 @@ public class CartaoModel {
 	private String titular;
 	@OneToOne
 	private BloqueioModel bloqueio;
-	//private List<Object> avisos = null;
+	@OneToMany(mappedBy = "cartao")
+	private List<AvisoViagemModel> avisosDeViagens;
 	//private List<Object> carteiras = null;
 	//private List<Object> parcelas = null;
 	private Integer limite;
@@ -62,7 +68,11 @@ public class CartaoModel {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public List<AvisoViagemModel> getAvisosDeViagens() {
+		return avisosDeViagens;
 	}	
+	
 	
 }
 //TODO Deveria habilitar UTC no projeto.

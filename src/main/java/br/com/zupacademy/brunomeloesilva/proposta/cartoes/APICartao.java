@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import br.com.zupacademy.brunomeloesilva.proposta.cartoes.bloqueio.BloqueioDTORequest;
+
 @FeignClient(name = "cartoes", url = "${api.cartoes.domain}")
 public interface APICartao {
 	

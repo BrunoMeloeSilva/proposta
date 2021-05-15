@@ -20,6 +20,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.zupacademy.brunomeloesilva.proposta.biometria.BiometriaDTORequest;
 import br.com.zupacademy.brunomeloesilva.proposta.biometria.BiometriaModel;
+import br.com.zupacademy.brunomeloesilva.proposta.cartoes.avisoviagem.AvisoViagemDTORequest;
+import br.com.zupacademy.brunomeloesilva.proposta.cartoes.avisoviagem.AvisoViagemModel;
+import br.com.zupacademy.brunomeloesilva.proposta.cartoes.bloqueio.BloqueioDTORequest;
+import br.com.zupacademy.brunomeloesilva.proposta.cartoes.bloqueio.BloqueioModel;
 
 @RestController
 @RequestMapping("/cartoes")
@@ -66,13 +70,29 @@ public class CartaoController {
 		cartaoModel.setBloqueio(bloqueioModel);
 		
 		//TODO O correto para resolver este ponto aqui, seria com publicação de eventos.
-		//Porque em um cenário real, se essa requisição demorar, a transação no banco fica
-		//aberta esperando o retorno do request !
 		try{
 			CartaoStatusDTOResposnse informaBloqueioCartao = apiCartao.informaBloqueioCartao(numeroCartao, new BloqueioDTORequest());
 			cartaoModel.setStatus(informaBloqueioCartao.getResultado());
 		}catch (Exception e) {}
 
 		return ResponseEntity.ok().build();		
+	}
+	
+	@PatchMapping("/{numeroCartao}/avisos-viagens")
+	@Transactional
+	public ResponseEntity<Void> avisoViagem(@PathVariable String numeroCartao
+			, @RequestHeader("user-agent") String userAgent
+			, @RequestHeader("host") String host
+			, @RequestBody @Valid AvisoViagemDTORequest avisoViagemDTORequest) {
+		
+		CartaoModel cartaoModel = entityManager.find(CartaoModel.class, numeroCartao);
+		if(cartaoModel == null)
+			return ResponseEntity.notFound().build();
+		
+		AvisoViagemModel avisoViagemModel = new AvisoViagemModel(avisoViagemDTORequest.getDestinoViagem()
+				, avisoViagemDTORequest.getDataTerminoViagem(), userAgent, host, cartaoModel);
+		entityManager.persist(avisoViagemModel);
+		
+		return ResponseEntity.ok().build();
 	}
 }
