@@ -28,7 +28,6 @@ import br.com.zupacademy.brunomeloesilva.proposta.cartoes.bloqueio.BloqueioDTORe
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.bloqueio.BloqueioModel;
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.carteira.CarteiraDTORequest;
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.carteira.CarteiraModel;
-import br.com.zupacademy.brunomeloesilva.proposta.cartoes.carteira.TipoCarteira;
 import feign.FeignException;
 
 @RestController
@@ -119,8 +118,8 @@ public class CartaoController {
 			return ResponseEntity.notFound().build();
 		
 		for (CarteiraModel carteiraDigital : cartaoModel.getCarteiras()) {
-			if(carteiraDigital.getCarteira().equals(TipoCarteira.PAYPAL))
-				throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Este cartão já foi vinculado ao PAYPAL.");
+			if(carteiraDigital.getCarteira().equals(carteiraDTORequest.getCarteira()))
+				throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Este cartão já foi vinculado ao " + carteiraDTORequest.getCarteira());
 		}
 		
 		URI uri = null;
