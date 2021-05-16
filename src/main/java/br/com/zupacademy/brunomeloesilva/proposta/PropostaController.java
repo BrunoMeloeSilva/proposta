@@ -28,6 +28,8 @@ import br.com.zupacademy.brunomeloesilva.proposta.validacoes.RegraDeNegocios;
 import br.com.zupacademy.brunomeloesilva.share.meter.MinhasMetricas;
 import feign.FeignException.FeignClientException;
 import feign.RetryableException;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 
 @RestController
 @RequestMapping("/propostas")
@@ -41,11 +43,19 @@ public class PropostaController {
 	APIRestricoesFinanceiras analisaRestricoesFinanceiras;
 	@Autowired
 	MinhasMetricas minhasMetricas;
+	@Autowired
+	Tracer tracer;
 	
 	@PostMapping
 	@Transactional
 	public ResponseEntity<PropostaDTOResponse> cadastrar(@RequestBody @Valid PropostaDTORequest propostaDTORequest
 			,UriComponentsBuilder uriComponentsBuilder) throws Exception {
+		
+		Span activeSpan = tracer.activeSpan();
+		activeSpan.setTag("user.email", propostaDTORequest.getEmail());
+		activeSpan.setBaggageItem("user.nome", propostaDTORequest.getNome());
+		activeSpan.log("Meu log");
+
 		
 		verificaSeJaTemOCpfOuCnpjEmPropostaJaExiste(propostaDTORequest);
 			
