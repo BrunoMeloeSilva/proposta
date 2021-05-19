@@ -52,7 +52,7 @@ services:
       - transacoes
       - postgres
     environment:
-      KEYCLOACK_FRONTEND_URL: http://keycloack:8080/auth
+#      KEYCLOACK_FRONTEND_URL: http://keycloack:8080/auth
       DB_VENDOR: postgres
       DB_ADDR: postgres
       DB_PORT: 5432
@@ -142,36 +142,36 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=proposta
-  proposta: 
-    build: 
-      dockerfile: ./Dockerfile 
-      context: . 
-    image: brunomeloesilva/proposta
-    container_name: proposta
-    environment:
-      - DB_URL=jdbc:mysql://db:3306/proposta
-      - DB_USER=root
-      - DB_PASS=root
-      - NOME_DA_APLICACAO=propostas
-      - AMBIENTE=desenvolvimento
-      - API_RESTRICOESFINANCEIRAS_DOMAIN=http://analise:9999
-      - API_RESTRICOESFINANCEIRAS_RECURSO=/api/solicitacao
-      - API_CARTOES_DOMAIN=http://contas:8888
-      - API_CARTOES_RECURSO=/api/cartoes?idProposta={idProposta}
-      - API_CARTOES_RECURSO_BLOQUEIO=/api/cartoes/{numeroCartao}/bloqueios
-      - API_CARTOES_RECURSO_AVISOVIAGEM=/api/cartoes/{numeroCartao}/avisos
-      - API_CARTOES_RECURSO_VINCULARCARTEIRA=/api/cartoes/{numeroCartao}/carteiras
-      - KEYCLOAK_ISSUER_URI=http://keycloak:18080/auth/realms/nosso-cartao
-      - KEYCLOAK_JWKS_URI=http://keycloak:18080/auth/realms/nosso-cartao/protocol/openid-connect/certs
-      - JAEGER_ENABLED=true
-      - APPLICATION=propostas
-      - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
-#      - JAEGER_SAMPLER=1.0
-      - JAEGER_SAMPLER=true
-    ports: 
-      - "8080:8080"  
-    depends_on: 
-      - db    
+#  proposta: 
+#    build: 
+#      dockerfile: ./Dockerfile 
+#      context: . 
+#    image: brunomeloesilva/proposta
+#    container_name: proposta
+#    environment:
+#      - DB_URL=jdbc:mysql://db:3306/proposta
+#      - DB_USER=root
+#      - DB_PASS=root
+#      - NOME_DA_APLICACAO=propostas
+#      - AMBIENTE=desenvolvimento
+#      - API_RESTRICOESFINANCEIRAS_DOMAIN=http://analise:9999
+#      - API_RESTRICOESFINANCEIRAS_RECURSO=/api/solicitacao
+#      - API_CARTOES_DOMAIN=http://contas:8888
+#      - API_CARTOES_RECURSO=/api/cartoes?idProposta={idProposta}
+#      - API_CARTOES_RECURSO_BLOQUEIO=/api/cartoes/{numeroCartao}/bloqueios
+#      - API_CARTOES_RECURSO_AVISOVIAGEM=/api/cartoes/{numeroCartao}/avisos
+#      - API_CARTOES_RECURSO_VINCULARCARTEIRA=/api/cartoes/{numeroCartao}/carteiras
+#      - KEYCLOAK_ISSUER_URI=http://keycloak:18080/auth/realms/nosso-cartao
+#      - KEYCLOAK_JWKS_URI=http://keycloak:18080/auth/realms/nosso-cartao/protocol/openid-connect/certs
+#      - JAEGER_ENABLED=true
+#      - APPLICATION=propostas
+#      - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+##      - JAEGER_SAMPLER=1.0
+#      - JAEGER_SAMPLER=true
+#    ports: 
+#      - "8080:8080"  
+#    depends_on: 
+#      - db    
    
 
 volumes:

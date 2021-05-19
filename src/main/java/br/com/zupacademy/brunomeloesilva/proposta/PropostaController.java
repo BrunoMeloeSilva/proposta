@@ -26,6 +26,7 @@ import br.com.zupacademy.brunomeloesilva.proposta.analisefinanceira.AnaliseFinan
 import br.com.zupacademy.brunomeloesilva.proposta.validacoes.PropostaJaExisteException;
 import br.com.zupacademy.brunomeloesilva.proposta.validacoes.RegraDeNegocios;
 import br.com.zupacademy.brunomeloesilva.share.meter.MinhasMetricas;
+import br.com.zupacademy.brunomeloesilva.share.seguranca.Criptografia;
 import feign.FeignException.FeignClientException;
 import feign.RetryableException;
 import io.opentracing.Span;
@@ -45,6 +46,8 @@ public class PropostaController {
 	MinhasMetricas minhasMetricas;
 	@Autowired
 	Tracer tracer;
+	@Autowired
+	Criptografia criptografia;
 	
 	@PostMapping
 	@Transactional
@@ -59,7 +62,7 @@ public class PropostaController {
 		
 		verificaSeJaTemOCpfOuCnpjEmPropostaJaExiste(propostaDTORequest);
 			
-		PropostaModel propostaModel = propostaDTORequest.toModel();
+		PropostaModel propostaModel = propostaDTORequest.toModel(criptografia);
 		entityManager.persist(propostaModel);
 		
 		defineStatusDaProposta(propostaModel);
@@ -67,14 +70,14 @@ public class PropostaController {
 		minhasMetricas.meuContadorPropostasCriadas();
 		
 		URI uriProposta = uriComponentsBuilder.path("/propostas/{id}").build(propostaModel.getUUID());
-		return ResponseEntity.created(uriProposta).body(new PropostaDTOResponse(propostaModel));
+		return ResponseEntity.created(uriProposta).body(new PropostaDTOResponse(propostaModel, criptografia));
 	}
 	
 	@GetMapping("/{idProposta}")
 	public ResponseEntity<PropostaDTOResponseCompleta> consultaProposta(@PathVariable String idProposta){
 		PropostaModel propostaModel = entityManager.find(PropostaModel.class, idProposta);
 		if(propostaModel != null) {
-			PropostaDTOResponseCompleta propostaDTOResponseCompleta = new PropostaDTOResponseCompleta(propostaModel);
+			PropostaDTOResponseCompleta propostaDTOResponseCompleta = new PropostaDTOResponseCompleta(propostaModel, criptografia);
 			return ResponseEntity.ok(propostaDTOResponseCompleta);
 		}
 		return ResponseEntity.notFound().build();
@@ -90,7 +93,7 @@ public class PropostaController {
 	}
 
 	private void checagemDaAnaliseFinanceira(PropostaModel propostaModel) throws FeignClientException, RetryableException {
-		AnaliseFinanceiraDTORequest dtoRequest = new AnaliseFinanceiraDTORequest(propostaModel);
+		AnaliseFinanceiraDTORequest dtoRequest = new AnaliseFinanceiraDTORequest(propostaModel, criptografia);
 		analisaRestricoesFinanceiras.analisar(dtoRequest);
 	}
 

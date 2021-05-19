@@ -3,6 +3,7 @@ package br.com.zupacademy.brunomeloesilva.proposta;
 import java.math.BigDecimal;
 
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.CartaoDTOResponse;
+import br.com.zupacademy.brunomeloesilva.share.seguranca.Criptografia;
 
 public class PropostaDTOResponseCompleta {
 	
@@ -15,9 +16,9 @@ public class PropostaDTOResponseCompleta {
 	private PropostaStatus propostaStatus;
 	private CartaoDTOResponse cartao;
 
-	public PropostaDTOResponseCompleta(PropostaModel propostaModel) {
+	public PropostaDTOResponseCompleta(PropostaModel propostaModel, Criptografia criptografia) {
 		this.idProposta = propostaModel.getUUID();
-		this.cpfOuCnpj = propostaModel.getCpfOuCnpj();
+		this.cpfOuCnpj = criptografia.descriptografar(propostaModel.getCpfOuCnpj());
 		this.email = propostaModel.getEmail();
 		this.nome = propostaModel.getNome();
 		this.endereco = propostaModel.getEndereco();

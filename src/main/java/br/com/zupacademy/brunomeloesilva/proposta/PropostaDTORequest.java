@@ -9,6 +9,7 @@ import javax.validation.constraints.Positive;
 
 import br.com.zupacademy.brunomeloesilva.proposta.validacoes.CpfOuCnpj;
 import br.com.zupacademy.brunomeloesilva.proposta.validacoes.RegraDeNegocios;
+import br.com.zupacademy.brunomeloesilva.share.seguranca.Criptografia;
 import br.com.zupacademy.brunomeloesilva.share.validacoes.ValorDuplicado;
 
 public class PropostaDTORequest {
@@ -50,8 +51,8 @@ public class PropostaDTORequest {
 		return salario;
 	}
 
-	public PropostaModel toModel() {
-		return new PropostaModel(this);
+	public PropostaModel toModel(Criptografia propriedadesCriptografia) {
+		return new PropostaModel(this, propriedadesCriptografia);
 	}
 	
 	

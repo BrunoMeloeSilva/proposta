@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import br.com.zupacademy.brunomeloesilva.proposta.cartoes.CartaoModel;
+import br.com.zupacademy.brunomeloesilva.share.seguranca.Criptografia;
 
 @Entity
 @Table(name = "PROPOSTA")
@@ -23,7 +24,7 @@ public class PropostaModel {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	private String UUID;
-	@Column(nullable = false, length = 18, unique = true)
+	@Column(nullable = false, unique = true)//, length = 18
 	private String cpfOuCnpj;
 	@Column(nullable = false, length = 100)
 	private String email;
@@ -40,8 +41,8 @@ public class PropostaModel {
 	
 	@Deprecated
 	public PropostaModel() {/*Somente para o Hibernate*/}
-	public PropostaModel(PropostaDTORequest propostaDTORequest) {
-		this.cpfOuCnpj = propostaDTORequest.getCpfOuCnpj();
+	public PropostaModel(PropostaDTORequest propostaDTORequest, Criptografia criptografia) {
+		this.cpfOuCnpj = criptografia.criptografar(propostaDTORequest.getCpfOuCnpj());
 		this.email = propostaDTORequest.getEmail();
 		this.nome = propostaDTORequest.getNome();
 		this.endereco = propostaDTORequest.getEndereco();

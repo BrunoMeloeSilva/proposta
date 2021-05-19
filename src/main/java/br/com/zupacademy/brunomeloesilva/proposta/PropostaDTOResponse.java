@@ -2,7 +2,10 @@ package br.com.zupacademy.brunomeloesilva.proposta;
 
 import java.math.BigDecimal;
 
+import br.com.zupacademy.brunomeloesilva.share.seguranca.Criptografia;
+
 public class PropostaDTOResponse {
+
 	
 	private String UUID;
 	private String cpfOuCnpj;
@@ -12,9 +15,9 @@ public class PropostaDTOResponse {
 	private BigDecimal salario;
 	private PropostaStatus propostaStatus;
 
-	public PropostaDTOResponse(PropostaModel propostaModel) {
+	public PropostaDTOResponse(PropostaModel propostaModel, Criptografia criptografia) {
 		this.UUID = propostaModel.getUUID();
-		this.cpfOuCnpj = propostaModel.getCpfOuCnpj();
+		this.cpfOuCnpj = criptografia.descriptografar(propostaModel.getCpfOuCnpj());
 		this.email = propostaModel.getEmail();
 		this.nome = propostaModel.getNome();
 		this.endereco = propostaModel.getEndereco();
